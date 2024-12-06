@@ -1,5 +1,6 @@
 import React from "react";
 import { FaStar, FaEye, FaShareAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const NewsCard = ({ news }) => {
   const {
@@ -40,7 +41,7 @@ const NewsCard = ({ news }) => {
       <img
         src={thumbnail_url}
         alt={title}
-        className="w-full h-56 object-cover"
+        className="w-full md:h-[300px] lg:h-[500px] object-cover"
       />
 
       {/* Card Content */}
@@ -58,7 +59,7 @@ const NewsCard = ({ news }) => {
 
         <p className="text-gray-600 text-sm mt-3">
           {details.slice(0, 100)}...{" "}
-          <button className="text-blue-600 hover:underline">Read More</button>
+          <Link to={`/news/${news._id}`} className="text-blue-600 hover:underline">Read More</Link>
         </p>
       </div>
 
