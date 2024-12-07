@@ -1,14 +1,20 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../provider/AuthProvider';
 
 const Register = () => {
-    const {createNewUser, setUser} = useContext(AuthContext);
+    const {createNewUser, setUser, updateUserProfile} = useContext(AuthContext);
+    const navigate = useNavigate();
+    const [error, setError] = useState({});
     const handleOnSubmit = (e) => {
         e.preventDefault();
         // get form data
         const form = new FormData(e.target);
         const name = form.get("name");
+        if(name.length < 5){
+            setError({...error, name: "must be more than 5 character long"})
+            return ;
+        }
         const email = form.get("email");
         const photo = form.get("photo");
         const password = form.get("password");
@@ -19,6 +25,12 @@ const Register = () => {
             const user = result.user
             setUser(user);
             // console.log(user);
+            updateUserProfile({displayName:name, photoURL:photo})
+            .then(()=> {
+                navigate('/')
+            }).catch((err)=> {
+                console.log(err)
+            })
         })
         .catch((error)=> {
             const errorCode = error.code;
@@ -37,6 +49,12 @@ const Register = () => {
                             <span className="label-text">Name</span>
                         </label>
                         <input name='name' type="text" placeholder="name" className="input input-bordered rounded-none" required />
+                        {
+                            error.name && 
+                            <label className="label text-xs text-red-500">
+                            {error.name}
+                        </label>
+                        }
                     </div>
                     {/* photo url */}
                     <div className="form-control">
